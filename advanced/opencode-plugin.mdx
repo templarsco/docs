@@ -1,0 +1,43 @@
+---
+title: OpenCode Plugin
+description: Native OpenCode integration with automatic model discovery.
+---
+
+The `@lightweight/opencode-plugin` package provides native integration between OpenCode and the Lightweight API with automatic model discovery, auth, and streaming.
+
+## Installation
+
+```bash
+npm install @lightweight/opencode-plugin
+```
+
+## Configuration
+
+Add to your `opencode.json`:
+
+```json
+{
+  "plugins": ["@lightweight/opencode-plugin"],
+  "env": {
+    "LIGHTWEIGHT_API_KEY": "lw_sk_your-key-here"
+  }
+}
+```
+
+## Environment Variable
+
+Alternatively, set the key via environment:
+
+```bash
+export LIGHTWEIGHT_API_KEY="lw_sk_your-key-here"
+```
+
+## Verify
+
+Launch OpenCode — the plugin auto-registers all Lightweight models:
+
+```bash
+opencode
+```
+
+Select any model from the catalog and send a test prompt.

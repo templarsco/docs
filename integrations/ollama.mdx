@@ -1,0 +1,31 @@
+---
+title: Ollama
+description: Use Ollama's OpenAI-compatible mode with Lightweight.
+---
+
+[Ollama](https://ollama.com) supports OpenAI-compatible API endpoints. You can point Ollama's OpenAI compatibility layer at Lightweight to access cloud models alongside your local ones.
+
+## Setup
+
+Set the following environment variables to redirect Ollama's OpenAI-compatible requests to Lightweight:
+
+<Tabs>
+  <Tab title="Bash / macOS / Linux">
+    ```bash
+    export OLLAMA_OPENAI_BASE_URL="https://api.lightweight.one/v1"
+    export OLLAMA_OPENAI_API_KEY="lw_sk_your-key-here"
+    ```
+  </Tab>
+  <Tab title="PowerShell / Windows">
+    ```powershell
+    $env:OLLAMA_OPENAI_BASE_URL = "https://api.lightweight.one/v1"
+    $env:OLLAMA_OPENAI_API_KEY = "lw_sk_your-key-here"
+    ```
+  </Tab>
+</Tabs>
+
+Once set, any tool or application that uses Ollama's OpenAI-compatible endpoint will be routed through Lightweight, giving you access to the full [model catalog](/models).
+
+<Note>
+  This configuration applies to Ollama's OpenAI-compatible mode only. Local Ollama models will continue to run locally as usual.
+</Note>

@@ -1,0 +1,83 @@
+---
+title: Models Catalog
+description: All available models by provider with context windows and capabilities.
+---
+
+Lightweight provides access to **25+ models** from 4 providers. The live catalog is always available at `GET /v1/models`.
+
+## OpenAI
+
+| Model | Context | Status |
+|-------|---------|--------|
+| `gpt-5.4` | 200K | Stable |
+| `gpt-5.4-mini` | 200K | Stable |
+| `gpt-5.2` | 200K | Stable |
+| `gpt-5.1` | 200K | Stable |
+| `gpt-5.1-codex` | 400K | Stable |
+| `gpt-5.1-codex-max` | 400K | Stable |
+| `gpt-5.1-codex-mini` | 400K | Preview |
+| `gpt-5.2-codex` | 400K | Stable |
+| `gpt-5.3-codex` | 400K | Stable |
+| `gpt-5-mini` | 200K | Stable |
+| `gpt-4.1` | 128K | Stable |
+| `gpt-4o` | 128K | Stable |
+| `gpt-4o-mini` | 128K | Stable |
+
+## Anthropic
+
+| Model | Context | Status |
+|-------|---------|--------|
+| `claude-opus-4.6` | 200K | Stable |
+| `claude-opus-4.6-fast` | 200K | Preview |
+| `claude-sonnet-4.6` | 200K | Stable |
+| `claude-sonnet-4.5` | 200K | Stable |
+| `claude-sonnet-4` | 200K | Stable |
+| `claude-opus-4.5` | 200K | Stable |
+| `claude-haiku-4.5` | 200K | Stable |
+
+<Note>
+  **Extended thinking** is supported for Claude models. The model reasons internally and thinking blocks are returned in the API response.
+</Note>
+
+## Google
+
+| Model | Context | Status |
+|-------|---------|--------|
+| `gemini-2.5-pro` | 1M | Stable |
+| `gemini-3-flash-preview` | 1M | Preview |
+| `gemini-3-pro-preview` | 1M | Preview |
+| `gemini-3.1-pro-preview` | 1M | Preview |
+
+## xAI
+
+| Model | Context | Status |
+|-------|---------|--------|
+| `grok-code-fast-1` | 128K | Preview |
+
+## Model Aliases
+
+For convenience, you can use these short names:
+
+| Alias | Resolves To |
+|-------|-------------|
+| `claude-opus` | `claude-opus-4.6` |
+| `claude-sonnet` | `claude-sonnet-4.6` |
+| `claude-fast` | `claude-opus-4.6-fast` |
+| `opus-fast` | `claude-opus-4.6-fast` |
+| `opus-4.6` | `claude-opus-4.6` |
+| `sonnet-4.6` | `claude-sonnet-4.6` |
+
+<Warning>
+  **Do not use versioned model names** like `claude-sonnet-4-20250514` or `claude-haiku-4-5-20251001`. Use the short names listed above.
+</Warning>
+
+## Live Catalog
+
+Query the API for the always-current list:
+
+```bash
+curl https://api.lightweight.one/v1/models \
+  -H "Authorization: Bearer lw_sk_your-key-here"
+```
+
+See [Models API](/advanced/models-api) for the full response schema.

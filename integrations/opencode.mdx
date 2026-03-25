@@ -1,0 +1,40 @@
+---
+title: OpenCode
+description: Connect OpenCode to Lightweight for multi-model AI coding assistance.
+---
+
+[OpenCode](https://opencode.ai) is an open-source AI coding assistant. Connect it to Lightweight to access all models through a single configuration.
+
+## Setup
+
+<Steps>
+  <Step title="Open Settings">
+    Launch OpenCode and navigate to the settings panel.
+  </Step>
+  <Step title="Select OpenAI-compatible provider">
+    In the provider dropdown, select **OpenAI-compatible** as the provider type.
+  </Step>
+  <Step title="Set Base URL">
+    Enter the Lightweight API base URL:
+
+    ```
+    https://api.lightweight.one/v1
+    ```
+  </Step>
+  <Step title="Set API Key">
+    Enter your Lightweight API key:
+
+    ```
+    lw_sk_your-key-here
+    ```
+  </Step>
+  <Step title="Save and start coding">
+    Save your settings. You can now use any model from the [catalog](/models) by entering its name in the model selector.
+  </Step>
+</Steps>
+
+<Tip>
+  OpenCode may not list Lightweight models in its dropdown. You can **manually type** any model name from the [catalog](/models) (e.g. `claude-sonnet-4.5`, `gpt-5.4`) into the model field.
+</Tip>
+
+See also: [OpenCode Plugin](/advanced/opencode-plugin) for a deeper integration using the official plugin.

@@ -1,0 +1,82 @@
+---
+title: Any OpenAI-Compatible Tool
+description: Connect any tool that supports OpenAI's API format to Lightweight.
+---
+
+Lightweight is **100% OpenAI-compatible**. If your tool supports custom OpenAI endpoints, you can connect it to Lightweight in four steps.
+
+## Generic Setup
+
+<Steps>
+  <Step title="Find the provider configuration">
+    Open your tool's settings and look for an **OpenAI**, **OpenAI-compatible**, or **Custom API** provider option.
+  </Step>
+  <Step title="Set the Base URL">
+    Enter the Lightweight API base URL:
+
+    ```
+    https://api.lightweight.one/v1
+    ```
+  </Step>
+  <Step title="Set the API Key">
+    Enter your Lightweight API key (starts with `lw_sk_`):
+
+    ```
+    lw_sk_your-key-here
+    ```
+  </Step>
+  <Step title="Choose a model">
+    Enter any model ID from the [catalog](/models). For example:
+
+    - `gpt-5.4` — OpenAI flagship
+    - `claude-sonnet-4.5` — Anthropic balanced
+    - `gemini-2.5-pro` — Google general
+    - `grok-code-fast-1` — xAI code
+
+    If the tool has a model dropdown, you may need to manually type the model name.
+  </Step>
+</Steps>
+
+---
+
+## Environment Variables
+
+Many CLI tools accept configuration via environment variables. These two cover most cases:
+
+<Tabs>
+  <Tab title="Bash / macOS / Linux">
+    ```bash
+    export OPENAI_API_KEY="lw_sk_your-key-here"
+    export OPENAI_BASE_URL="https://api.lightweight.one/v1"
+    ```
+  </Tab>
+  <Tab title="PowerShell / Windows">
+    ```powershell
+    $env:OPENAI_API_KEY = "lw_sk_your-key-here"
+    $env:OPENAI_BASE_URL = "https://api.lightweight.one/v1"
+    ```
+  </Tab>
+</Tabs>
+
+<Note>
+  Some tools use `OPENAI_API_BASE` instead of `OPENAI_BASE_URL`. Check your tool's documentation if the above doesn't work.
+</Note>
+
+---
+
+## Verify It Works
+
+Make a quick test call to confirm the connection:
+
+```bash
+curl https://api.lightweight.one/v1/chat/completions \
+  -H "Authorization: Bearer lw_sk_your-key-here" \
+  -H "Content-Type: application/json" \
+  -d '{"model": "gpt-5.4", "messages": [{"role": "user", "content": "Hello!"}], "max_tokens": 50}'
+```
+
+If you get a response, your tool will work with the same credentials.
+
+<Tip>
+  Don't see your tool listed in our [integration guides](/integrations/claude-code)? Open a [discussion](https://github.com/templarsco/lightweight/discussions) and we'll help you set it up.
+</Tip>

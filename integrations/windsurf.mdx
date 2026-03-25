@@ -1,0 +1,34 @@
+---
+title: Windsurf
+description: Configure Windsurf to use Lightweight as an AI provider.
+---
+
+[Windsurf](https://codeium.com/windsurf) (by Codeium) is an AI-powered IDE. Connect it to Lightweight to access all models through a single key.
+
+## Setup
+
+<Steps>
+  <Step title="Open Windsurf Settings">
+    Launch Windsurf and navigate to **Settings** (Cmd/Ctrl + ,).
+  </Step>
+  <Step title="Navigate to AI Configuration">
+    In the settings panel, find the **AI Provider** or **Model Configuration** section.
+  </Step>
+  <Step title="Select OpenAI-compatible provider">
+    Choose **OpenAI Compatible** as the provider type.
+  </Step>
+  <Step title="Enter connection details">
+    Configure the following:
+
+    - **Base URL:** `https://api.lightweight.one/v1`
+    - **API Key:** `lw_sk_your-key-here`
+    - **Model:** `claude-sonnet-4.5` (or any model from the [catalog](/models))
+  </Step>
+  <Step title="Save and start coding">
+    Save your settings. Windsurf will now route AI requests through Lightweight. You can switch models at any time by changing the model field.
+  </Step>
+</Steps>
+
+<Note>
+  If Windsurf doesn't show Lightweight models in its dropdown, manually type the model ID. See the [Models](/models) page for all available options.
+</Note>

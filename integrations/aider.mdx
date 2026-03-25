@@ -1,0 +1,47 @@
+---
+title: Aider
+description: Use Aider with Lightweight for AI pair programming with any model.
+---
+
+[Aider](https://aider.chat) is an AI pair programming tool that works in your terminal. Connect it to Lightweight to use any model in the catalog.
+
+## CLI Command
+
+The quickest way to use Aider with Lightweight is to pass the configuration flags directly:
+
+```bash
+aider --openai-api-base https://api.lightweight.one/v1 \
+      --openai-api-key lw_sk_your-key-here \
+      --model openai/claude-sonnet-4.5
+```
+
+<Note>
+  Aider requires the `openai/` prefix when using OpenAI-compatible providers. For example, use `openai/claude-sonnet-4.5` instead of `claude-sonnet-4.5`.
+</Note>
+
+## Environment Variable Alternative
+
+If you prefer not to pass flags every time, set environment variables:
+
+<Tabs>
+  <Tab title="Bash / macOS / Linux">
+    ```bash
+    export OPENAI_API_BASE="https://api.lightweight.one/v1"
+    export OPENAI_API_KEY="lw_sk_your-key-here"
+
+    aider --model openai/gpt-5.4
+    ```
+  </Tab>
+  <Tab title="PowerShell / Windows">
+    ```powershell
+    $env:OPENAI_API_BASE = "https://api.lightweight.one/v1"
+    $env:OPENAI_API_KEY = "lw_sk_your-key-here"
+
+    aider --model openai/gpt-5.4
+    ```
+  </Tab>
+</Tabs>
+
+<Tip>
+  You can switch models on the fly by changing the `--model` flag. Browse all available models on the [Models](/models) page.
+</Tip>

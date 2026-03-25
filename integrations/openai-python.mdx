@@ -1,0 +1,66 @@
+---
+title: OpenAI Python SDK
+description: Use the official OpenAI Python SDK with Lightweight.
+---
+
+The official [OpenAI Python SDK](https://github.com/openai/openai-python) works with Lightweight by setting a custom `base_url`. This gives you access to every model in the catalog through the familiar OpenAI Python interface.
+
+## Installation
+
+```bash
+pip install openai
+```
+
+## Usage
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="lw_sk_your-key-here",
+    base_url="https://api.lightweight.one/v1"
+)
+
+response = client.chat.completions.create(
+    model="gpt-5.4",
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": "What is the capital of France?"}
+    ]
+)
+
+print(response.choices[0].message.content)
+```
+
+## Streaming
+
+```python
+stream = client.chat.completions.create(
+    model="claude-sonnet-4.5",
+    messages=[{"role": "user", "content": "Write a haiku about Python."}],
+    stream=True
+)
+
+for chunk in stream:
+    if chunk.choices[0].delta.content:
+        print(chunk.choices[0].delta.content, end="")
+```
+
+## Using Different Models
+
+Swap the `model` parameter to use any provider — no other changes needed:
+
+```python
+# Anthropic
+response = client.chat.completions.create(model="claude-opus-4.6", messages=messages)
+
+# Google
+response = client.chat.completions.create(model="gemini-2.5-pro", messages=messages)
+
+# xAI
+response = client.chat.completions.create(model="grok-code-fast-1", messages=messages)
+```
+
+<Tip>
+  See the full [Models catalog](/models) and [Pricing](/pricing) for all available options.
+</Tip>

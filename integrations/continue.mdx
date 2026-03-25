@@ -1,0 +1,46 @@
+---
+title: Continue
+description: Set up Continue with Lightweight for AI-powered coding in VS Code.
+---
+
+[Continue](https://continue.dev) is an open-source AI coding assistant for VS Code and JetBrains. Connect it to Lightweight by editing your config file.
+
+## Setup
+
+Edit your Continue configuration file:
+
+**File:** `~/.continue/config.json`
+
+```json
+{
+  "models": [
+    {
+      "title": "Claude Sonnet 4.5 (Lightweight)",
+      "provider": "openai",
+      "model": "claude-sonnet-4.5",
+      "apiBase": "https://api.lightweight.one/v1",
+      "apiKey": "lw_sk_your-key-here"
+    },
+    {
+      "title": "GPT-5.4 (Lightweight)",
+      "provider": "openai",
+      "model": "gpt-5.4",
+      "apiBase": "https://api.lightweight.one/v1",
+      "apiKey": "lw_sk_your-key-here"
+    },
+    {
+      "title": "Gemini 2.5 Pro (Lightweight)",
+      "provider": "openai",
+      "model": "gemini-2.5-pro",
+      "apiBase": "https://api.lightweight.one/v1",
+      "apiKey": "lw_sk_your-key-here"
+    }
+  ]
+}
+```
+
+<Tip>
+  You can add as many models as you like. Use any model ID from the [catalog](/models). Continue's provider should be set to `"openai"` since Lightweight is OpenAI-compatible.
+</Tip>
+
+After saving, reload the Continue extension. Your Lightweight models will appear in the model selector dropdown.

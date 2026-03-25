@@ -1,0 +1,41 @@
+---
+title: Cursor
+description: Configure Cursor to use Lightweight as a custom OpenAI-compatible provider.
+---
+
+[Cursor](https://cursor.com) is an AI-powered code editor. Connect it to Lightweight to use any model from the catalog directly in your editor.
+
+## Setup
+
+<Steps>
+  <Step title="Open Cursor Settings">
+    Open Cursor and go to **Settings** (Cmd/Ctrl + ,).
+  </Step>
+  <Step title="Navigate to Models">
+    In the settings sidebar, click on **Models**.
+  </Step>
+  <Step title="Select OpenAI provider">
+    Under the provider configuration, select **OpenAI** as the provider type.
+  </Step>
+  <Step title="Set Base URL">
+    Set the API base URL to:
+
+    ```
+    https://api.lightweight.one/v1
+    ```
+  </Step>
+  <Step title="Set API Key">
+    Enter your Lightweight API key:
+
+    ```
+    lw_sk_your-key-here
+    ```
+  </Step>
+  <Step title="Select a model and start coding">
+    Type any model name from the [catalog](/models) into the model field — for example `gpt-5.4`, `claude-sonnet-4.5`, or `gemini-2.5-pro`. Save and start using AI features.
+  </Step>
+</Steps>
+
+<Note>
+  Cursor's model dropdown may not list Lightweight models. Manually type the model ID you want to use. See the full list on the [Models](/models) page.
+</Note>

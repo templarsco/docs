@@ -1,0 +1,67 @@
+---
+title: LiteLLM
+description: Use LiteLLM with Lightweight for a unified model interface.
+---
+
+[LiteLLM](https://github.com/BerriAI/litellm) is a lightweight Python library for calling 100+ LLM APIs in the same format. You can point it at Lightweight using CLI flags or environment variables.
+
+## CLI Usage
+
+```bash
+litellm --model openai/claude-sonnet-4.5 \
+        --api_base https://api.lightweight.one/v1 \
+        --api_key lw_sk_your-key-here
+```
+
+<Note>
+  LiteLLM requires the `openai/` prefix when using OpenAI-compatible providers.
+</Note>
+
+## Python Usage
+
+```python
+import litellm
+
+response = litellm.completion(
+    model="openai/gpt-5.4",
+    api_base="https://api.lightweight.one/v1",
+    api_key="lw_sk_your-key-here",
+    messages=[
+        {"role": "user", "content": "What is the capital of France?"}
+    ]
+)
+
+print(response.choices[0].message.content)
+```
+
+## Environment Variables
+
+Alternatively, set environment variables so you don't need to pass credentials on every call:
+
+<Tabs>
+  <Tab title="Bash / macOS / Linux">
+    ```bash
+    export OPENAI_API_BASE="https://api.lightweight.one/v1"
+    export OPENAI_API_KEY="lw_sk_your-key-here"
+    ```
+  </Tab>
+  <Tab title="PowerShell / Windows">
+    ```powershell
+    $env:OPENAI_API_BASE = "https://api.lightweight.one/v1"
+    $env:OPENAI_API_KEY = "lw_sk_your-key-here"
+    ```
+  </Tab>
+</Tabs>
+
+Then call LiteLLM without explicit credentials:
+
+```python
+response = litellm.completion(
+    model="openai/claude-sonnet-4.5",
+    messages=[{"role": "user", "content": "Hello!"}]
+)
+```
+
+<Tip>
+  LiteLLM supports streaming, function calling, and all other OpenAI-compatible features through Lightweight. See the full [Models catalog](/models).
+</Tip>

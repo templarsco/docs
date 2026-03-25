@@ -1,0 +1,156 @@
+---
+title: API Reference
+description: Endpoints, authentication, and error handling for the Lightweight API.
+---
+
+## Base URL
+
+```
+https://api.lightweight.one/v1
+```
+
+All API requests must be made over HTTPS.
+
+## Authentication
+
+Authenticate every request with a **Bearer token** in the `Authorization` header. Keys start with `lw_sk_`.
+
+```bash
+Authorization: Bearer lw_sk_your-key-here
+```
+
+Get your key from the [Dashboard](https://lightweight.one/dashboard).
+
+<Warning>
+  Never expose your API key in client-side code or public repositories. Keep it server-side or in environment variables.
+</Warning>
+
+---
+
+## Endpoints
+
+### POST /v1/chat/completions
+
+The primary endpoint — fully compatible with the OpenAI Chat Completions API. Works with **every model** in the catalog regardless of provider.
+
+```bash
+curl https://api.lightweight.one/v1/chat/completions \
+  -H "Authorization: Bearer lw_sk_your-key-here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gpt-5.4",
+    "messages": [
+      {"role": "system", "content": "You are a helpful assistant."},
+      {"role": "user", "content": "What is the capital of France?"}
+    ],
+    "max_tokens": 200
+  }'
+```
+
+**Key parameters:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `model` | string | Yes | Model ID from the [catalog](/models) |
+| `messages` | array | Yes | Array of message objects with `role` and `content` |
+| `max_tokens` | integer | No | Maximum tokens to generate |
+| `temperature` | number | No | Sampling temperature (0–2) |
+| `stream` | boolean | No | Enable server-sent events streaming |
+| `top_p` | number | No | Nucleus sampling parameter |
+| `stop` | string/array | No | Stop sequence(s) |
+
+---
+
+### POST /v1/messages
+
+Native **Anthropic Messages API** passthrough. Use this if you prefer the Anthropic SDK format.
+
+```bash
+curl https://api.lightweight.one/v1/messages \
+  -H "Authorization: Bearer lw_sk_your-key-here" \
+  -H "Content-Type: application/json" \
+  -H "anthropic-version: 2023-06-01" \
+  -d '{
+    "model": "claude-sonnet-4.5",
+    "max_tokens": 1024,
+    "messages": [
+      {"role": "user", "content": "Explain quantum computing in simple terms."}
+    ]
+  }'
+```
+
+---
+
+### POST /v1/responses
+
+**OpenAI Responses API** passthrough. Use this for the newer OpenAI Responses format.
+
+```bash
+curl https://api.lightweight.one/v1/responses \
+  -H "Authorization: Bearer lw_sk_your-key-here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gpt-5.4",
+    "input": "What is the capital of France?"
+  }'
+```
+
+---
+
+### GET /v1/models
+
+Returns the live catalog of all available models. See [Models API](/advanced/models-api) for full schema details.
+
+```bash
+curl https://api.lightweight.one/v1/models \
+  -H "Authorization: Bearer lw_sk_your-key-here"
+```
+
+---
+
+### GET /v1/usage
+
+Check your current token usage and quota.
+
+```bash
+curl https://api.lightweight.one/v1/usage \
+  -H "Authorization: Bearer lw_sk_your-key-here"
+```
+
+**Example response:**
+
+```json
+{
+  "used": 1250000,
+  "quota": 10000000,
+  "remaining": 8750000,
+  "resets_at": "2026-04-01T00:00:00Z"
+}
+```
+
+---
+
+## Error Codes
+
+| Status Code | Meaning | Description |
+|-------------|---------|-------------|
+| `401` | Unauthorized | Missing or invalid API key. Ensure your `Authorization` header contains a valid `lw_sk_` key. |
+| `403` | Forbidden | Your key does not have access to the requested model or resource. |
+| `429` | Rate Limited | You've exceeded your plan's requests-per-minute limit. Check the `Retry-After` header and wait before retrying. |
+| `502` | Bad Gateway | The upstream provider returned an error. Retry after a brief delay. |
+
+**Error response format:**
+
+```json
+{
+  "error": {
+    "message": "Rate limit exceeded. Please retry after 12 seconds.",
+    "type": "rate_limit_error",
+    "code": 429
+  }
+}
+```
+
+<Tip>
+  When you receive a `429`, read the `Retry-After` response header — it tells you exactly how many seconds to wait before your next request.
+</Tip>

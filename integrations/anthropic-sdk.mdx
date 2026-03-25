@@ -1,0 +1,136 @@
+---
+title: Anthropic SDK
+description: Use the official Anthropic Python and Node.js SDKs with Lightweight.
+---
+
+The official Anthropic SDKs work with Lightweight by simply changing the base URL and API key. This gives you access to **every model in the catalog** — not just Claude — through the familiar Anthropic SDK interface.
+
+<Note>
+  Even though you're using the Anthropic SDK, you can call any model available in the Lightweight catalog (OpenAI, Google, xAI) by passing its model ID.
+</Note>
+
+---
+
+## Python
+
+```bash
+pip install anthropic
+```
+
+```python
+import anthropic
+
+client = anthropic.Anthropic(
+    api_key="lw_sk_your-key-here",
+    base_url="https://api.lightweight.one/v1"
+)
+
+message = client.messages.create(
+    model="claude-sonnet-4.5",
+    max_tokens=1024,
+    messages=[
+        {"role": "user", "content": "Explain the difference between TCP and UDP."}
+    ]
+)
+
+print(message.content[0].text)
+```
+
+---
+
+## Node.js / TypeScript
+
+```bash
+npm install @anthropic-ai/sdk
+```
+
+```typescript
+import Anthropic from "@anthropic-ai/sdk";
+
+const client = new Anthropic({
+  apiKey: "lw_sk_your-key-here",
+  baseURL: "https://api.lightweight.one/v1",
+});
+
+async function main() {
+  const message = await client.messages.create({
+    model: "claude-sonnet-4.5",
+    max_tokens: 1024,
+    messages: [
+      { role: "user", content: "Explain the difference between TCP and UDP." },
+    ],
+  });
+
+  console.log(message.content[0].text);
+}
+
+main();
+```
+
+---
+
+## Streaming
+
+### Python Streaming
+
+```python
+import anthropic
+
+client = anthropic.Anthropic(
+    api_key="lw_sk_your-key-here",
+    base_url="https://api.lightweight.one/v1"
+)
+
+with client.messages.stream(
+    model="claude-sonnet-4.5",
+    max_tokens=1024,
+    messages=[
+        {"role": "user", "content": "Write a short story about a robot learning to paint."}
+    ]
+) as stream:
+    for text in stream.text_stream:
+        print(text, end="", flush=True)
+```
+
+### Node.js Streaming
+
+```typescript
+import Anthropic from "@anthropic-ai/sdk";
+
+const client = new Anthropic({
+  apiKey: "lw_sk_your-key-here",
+  baseURL: "https://api.lightweight.one/v1",
+});
+
+const stream = client.messages.stream({
+  model: "claude-sonnet-4.5",
+  max_tokens: 1024,
+  messages: [
+    { role: "user", content: "Write a short story about a robot learning to paint." },
+  ],
+});
+
+stream.on("text", (text) => process.stdout.write(text));
+await stream.finalMessage();
+```
+
+---
+
+## Using Non-Claude Models
+
+Because Lightweight is a unified gateway, you can use the Anthropic SDK to access models from any provider:
+
+```python
+# Use GPT-5.4 through the Anthropic SDK
+message = client.messages.create(
+    model="gpt-5.4",
+    max_tokens=1024,
+    messages=[
+        {"role": "user", "content": "Hello from GPT via the Anthropic SDK!"}
+    ]
+)
+```
+
+<Tip>
+  Browse the full [Models catalog](/models) to see every model available through Lightweight.
+</Tip>

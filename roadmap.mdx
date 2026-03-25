@@ -1,0 +1,43 @@
+---
+title: Roadmap
+description: Upcoming features and planned improvements.
+---
+
+## v1.x — Next
+
+### Embeddings API
+
+New `/v1/embeddings` endpoint for generating text embeddings — numerical vectors that capture semantic meaning.
+
+**Use cases:**
+- **Semantic search** — Find documents by meaning, not keywords
+- **RAG** — Embed docs, retrieve context, feed to LLM
+- **Classification** — Group similar content automatically
+- **Duplicate detection** — Identify semantically similar items
+
+```bash
+# Coming soon
+curl https://api.lightweight.one/v1/embeddings \
+  -H "Authorization: Bearer lw_sk_your-key-here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "text-embedding-3-large",
+    "input": "The quick brown fox jumps over the lazy dog"
+  }'
+```
+
+## v2 — Future
+
+### Agent Skills
+
+First-class support for the Agent Skills standard — versioned instruction bundles adopted by OpenAI, Anthropic, and 30+ AI tools.
+
+**What's planned:**
+- Skills registry integration (compatible with 89K+ community skills)
+- Cross-provider compatibility
+- SKILL.md format support
+- API-level skill management endpoints
+
+<Note>
+  Timeline to be announced. The ecosystem is rapidly evolving.
+</Note>

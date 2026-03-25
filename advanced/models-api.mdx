@@ -1,0 +1,124 @@
+---
+title: Models API
+description: Detailed reference for the GET /v1/models endpoint — full response schema and filtering options.
+---
+
+The `GET /v1/models` endpoint returns the live catalog of every model available through Lightweight. Use it to discover models, check context windows, and get real-time pricing.
+
+## Endpoint
+
+```
+GET https://api.lightweight.one/v1/models
+```
+
+```bash
+curl https://api.lightweight.one/v1/models \
+  -H "Authorization: Bearer lw_sk_your-key-here"
+```
+
+---
+
+## Response Schema
+
+Each model object in the response `data` array contains:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | Unique model identifier (e.g. `claude-sonnet-4.5`) |
+| `object` | string | Always `"model"` |
+| `created` | integer | Unix timestamp of when the model was added |
+| `owned_by` | string | Provider name (e.g. `openai`, `anthropic`, `google`, `xai`) |
+| `name` | string | Human-readable display name |
+| `description` | string | Short description of the model's capabilities |
+| `context_length` | integer | Maximum context window in tokens |
+| `max_completion_tokens` | integer | Maximum output tokens per request |
+| `pricing.input` | number | Cost per 1M input tokens (USD) |
+| `pricing.output` | number | Cost per 1M output tokens (USD) |
+| `capabilities.chat` | boolean | Supports chat completions |
+| `capabilities.streaming` | boolean | Supports streaming responses |
+| `capabilities.function_calling` | boolean | Supports function/tool calling |
+| `capabilities.vision` | boolean | Supports image inputs |
+| `capabilities.extended_thinking` | boolean | Supports chain-of-thought reasoning |
+| `category` | string | Model category (e.g. `flagship`, `balanced`, `budget`, `code`) |
+| `status` | string | Availability status (`available`, `preview`, `deprecated`) |
+| `aliases` | array | Short alias names that resolve to this model |
+| `provider` | string | Upstream provider identifier |
+
+---
+
+## Example Response
+
+```json
+{
+  "object": "list",
+  "data": [
+    {
+      "id": "claude-sonnet-4.5",
+      "object": "model",
+      "created": 1710000000,
+      "owned_by": "anthropic",
+      "name": "Claude Sonnet 4.5",
+      "description": "Anthropic's balanced model — excellent for everyday coding and analysis tasks.",
+      "context_length": 200000,
+      "max_completion_tokens": 8192,
+      "pricing": {
+        "input": 3.0,
+        "output": 15.0
+      },
+      "capabilities": {
+        "chat": true,
+        "streaming": true,
+        "function_calling": true,
+        "vision": true,
+        "extended_thinking": true
+      },
+      "category": "balanced",
+      "status": "available",
+      "aliases": ["claude-sonnet"],
+      "provider": "anthropic"
+    },
+    {
+      "id": "gpt-5.4",
+      "object": "model",
+      "created": 1710000000,
+      "owned_by": "openai",
+      "name": "GPT-5.4",
+      "description": "OpenAI's flagship model — state-of-the-art reasoning and generation.",
+      "context_length": 128000,
+      "max_completion_tokens": 16384,
+      "pricing": {
+        "input": 2.5,
+        "output": 10.0
+      },
+      "capabilities": {
+        "chat": true,
+        "streaming": true,
+        "function_calling": true,
+        "vision": true,
+        "extended_thinking": false
+      },
+      "category": "flagship",
+      "status": "available",
+      "aliases": ["gpt"],
+      "provider": "openai"
+    }
+  ]
+}
+```
+
+---
+
+## OpenRouter Format
+
+For tools that expect the OpenRouter model format, append `?format=openrouter` to the request:
+
+```bash
+curl "https://api.lightweight.one/v1/models?format=openrouter" \
+  -H "Authorization: Bearer lw_sk_your-key-here"
+```
+
+This returns models with OpenRouter-compatible field names and structure, making it easier to integrate with tools built for the OpenRouter ecosystem.
+
+<Note>
+  The OpenRouter format is a convenience wrapper — the same models and data are returned, just structured differently to match OpenRouter's schema.
+</Note>

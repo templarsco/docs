@@ -1,0 +1,52 @@
+---
+title: OpenRouter
+description: Access Lightweight models through the OpenRouter gateway.
+---
+
+<Warning>
+  **Coming Soon** — Registration in process. Backend ready, models not yet listed on OpenRouter.
+</Warning>
+
+All Lightweight models will be available through the OpenRouter unified API gateway once approved.
+
+## Model Naming
+
+Models use a `lightweight/` prefix on OpenRouter:
+
+| Lightweight ID | OpenRouter ID |
+|----------------|---------------|
+| `gpt-5.4` | `lightweight/gpt-5.4` |
+| `claude-sonnet-4.6` | `lightweight/claude-sonnet-4.6` |
+| `gemini-2.5-pro` | `lightweight/gemini-2.5-pro` |
+
+## Usage via OpenRouter
+
+```bash
+curl https://openrouter.ai/api/v1/chat/completions \
+  -H "Authorization: Bearer your-openrouter-key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "lightweight/gpt-5.4",
+    "messages": [{"role": "user", "content": "Hello!"}]
+  }'
+```
+
+## Python SDK
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="your-openrouter-key",
+    base_url="https://openrouter.ai/api/v1"
+)
+
+response = client.chat.completions.create(
+    model="lightweight/gpt-5.4",
+    messages=[{"role": "user", "content": "Hello!"}]
+)
+```
+
+<Note>
+  All models are free on OpenRouter (pricing "0"). Usage is subject to Lightweight rate limits.
+</Note>

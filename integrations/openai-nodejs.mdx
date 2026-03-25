@@ -1,0 +1,80 @@
+---
+title: OpenAI Node.js SDK
+description: Use the official OpenAI Node.js SDK with Lightweight.
+---
+
+The official [OpenAI Node.js SDK](https://github.com/openai/openai-node) works with Lightweight by setting a custom `baseURL`. Access every model in the catalog through the familiar OpenAI TypeScript/JavaScript interface.
+
+## Installation
+
+```bash
+npm install openai
+```
+
+## Usage
+
+```typescript
+import OpenAI from "openai";
+
+const client = new OpenAI({
+  apiKey: "lw_sk_your-key-here",
+  baseURL: "https://api.lightweight.one/v1",
+});
+
+async function main() {
+  const response = await client.chat.completions.create({
+    model: "gpt-5.4",
+    messages: [
+      { role: "system", content: "You are a helpful assistant." },
+      { role: "user", content: "What is the capital of France?" },
+    ],
+  });
+
+  console.log(response.choices[0].message.content);
+}
+
+main();
+```
+
+## Streaming
+
+```typescript
+const stream = await client.chat.completions.create({
+  model: "claude-sonnet-4.5",
+  messages: [{ role: "user", content: "Write a haiku about JavaScript." }],
+  stream: true,
+});
+
+for await (const chunk of stream) {
+  const content = chunk.choices[0]?.delta?.content;
+  if (content) process.stdout.write(content);
+}
+```
+
+## Using Different Models
+
+Swap the `model` parameter to use any provider — no other changes needed:
+
+```typescript
+// Anthropic
+const response = await client.chat.completions.create({
+  model: "claude-opus-4.6",
+  messages,
+});
+
+// Google
+const response = await client.chat.completions.create({
+  model: "gemini-2.5-pro",
+  messages,
+});
+
+// xAI
+const response = await client.chat.completions.create({
+  model: "grok-code-fast-1",
+  messages,
+});
+```
+
+<Tip>
+  See the full [Models catalog](/models) and [Pricing](/pricing) for all available options.
+</Tip>

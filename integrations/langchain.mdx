@@ -1,0 +1,65 @@
+---
+title: LangChain
+description: Use LangChain with Lightweight for building AI-powered applications.
+---
+
+[LangChain](https://python.langchain.com/) is a popular framework for building LLM-powered applications. Connect it to Lightweight using the `ChatOpenAI` class with a custom `base_url`.
+
+## Installation
+
+```bash
+pip install langchain-openai
+```
+
+## Usage
+
+```python
+from langchain_openai import ChatOpenAI
+
+llm = ChatOpenAI(
+    model="claude-sonnet-4.5",
+    api_key="lw_sk_your-key-here",
+    base_url="https://api.lightweight.one/v1"
+)
+
+response = llm.invoke("What is the capital of France?")
+print(response.content)
+```
+
+## With Chains
+
+```python
+from langchain_openai import ChatOpenAI
+from langchain_core.prompts import ChatPromptTemplate
+
+llm = ChatOpenAI(
+    model="gpt-5.4",
+    api_key="lw_sk_your-key-here",
+    base_url="https://api.lightweight.one/v1"
+)
+
+prompt = ChatPromptTemplate.from_messages([
+    ("system", "You are a helpful assistant that translates {input_language} to {output_language}."),
+    ("human", "{input}")
+])
+
+chain = prompt | llm
+response = chain.invoke({
+    "input_language": "English",
+    "output_language": "French",
+    "input": "Hello, how are you?"
+})
+
+print(response.content)
+```
+
+## Streaming
+
+```python
+for chunk in llm.stream("Write a poem about coding"):
+    print(chunk.content, end="", flush=True)
+```
+
+<Tip>
+  Because Lightweight is OpenAI-compatible, any LangChain component that uses `ChatOpenAI` will work. Swap models by changing the `model` parameter — see the full [catalog](/models).
+</Tip>

@@ -1,0 +1,114 @@
+---
+title: Claude Code
+description: Set up Claude Code CLI with the Lightweight API.
+---
+
+Lightweight fully supports Claude Code with native compatibility — no workaround flags needed.
+
+## Setup
+
+<Tabs>
+  <Tab title="Bash / macOS / Linux">
+    Add to your shell profile (`~/.bashrc`, `~/.zshrc`, etc.):
+
+    ```bash
+    export ANTHROPIC_BASE_URL="https://api.lightweight.one"
+    export ANTHROPIC_API_KEY="lw_sk_your-key-here"
+    ```
+
+    Then reload and run:
+
+    ```bash
+    source ~/.zshrc  # or ~/.bashrc
+    claude
+    ```
+  </Tab>
+  <Tab title="PowerShell / Windows">
+    For the current session:
+
+    ```powershell
+    $env:ANTHROPIC_BASE_URL = "https://api.lightweight.one"
+    $env:ANTHROPIC_API_KEY = "lw_sk_your-key-here"
+    claude
+    ```
+
+    For permanent setup, add to your PowerShell profile (`$PROFILE`).
+  </Tab>
+</Tabs>
+
+## Model Selection
+
+Override which models Claude Code uses for each tier:
+
+<Tabs>
+  <Tab title="Bash">
+    ```bash
+    export ANTHROPIC_DEFAULT_OPUS_MODEL="claude-opus-4.6"    # Complex tasks
+    export ANTHROPIC_DEFAULT_SONNET_MODEL="claude-sonnet-4.6" # Default tier
+    export ANTHROPIC_DEFAULT_HAIKU_MODEL="claude-haiku-4.5"   # Fast/cheap
+    ```
+  </Tab>
+  <Tab title="PowerShell">
+    ```powershell
+    $env:ANTHROPIC_DEFAULT_OPUS_MODEL = "claude-opus-4.6"
+    $env:ANTHROPIC_DEFAULT_SONNET_MODEL = "claude-sonnet-4.6"
+    $env:ANTHROPIC_DEFAULT_HAIKU_MODEL = "claude-haiku-4.5"
+    ```
+  </Tab>
+</Tabs>
+
+## Fast Mode (Reduced Latency)
+
+Use the lower-latency variant of Claude Opus:
+
+<Tabs>
+  <Tab title="Bash">
+    ```bash
+    export ANTHROPIC_DEFAULT_OPUS_MODEL="claude-opus-4.6-fast"
+    ```
+  </Tab>
+  <Tab title="PowerShell">
+    ```powershell
+    $env:ANTHROPIC_DEFAULT_OPUS_MODEL = "claude-opus-4.6-fast"
+    ```
+  </Tab>
+</Tabs>
+
+<Note>
+  Claude Code's built-in `/fast` toggle is a server-side feature at Anthropic. Through the proxy, set the model explicitly to `claude-opus-4.6-fast` instead.
+</Note>
+
+## Alternative: settings.json
+
+Add to `~/.claude/settings.json`:
+
+```json
+{
+  "env": {
+    "ANTHROPIC_BASE_URL": "https://api.lightweight.one",
+    "ANTHROPIC_API_KEY": "lw_sk_your-key-here",
+    "ANTHROPIC_DEFAULT_OPUS_MODEL": "claude-opus-4.6",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL": "claude-sonnet-4.6",
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "claude-haiku-4.5"
+  }
+}
+```
+
+## Features
+
+| Feature | Status |
+|---------|--------|
+| Chat & tool use | Fully supported |
+| Streaming | Fully supported |
+| Extended thinking | Supported — thinking blocks returned |
+| Prompt caching fields | Supported (pass-through) |
+| Beta headers | Accepted and handled |
+| 200K context | Full context window available |
+
+<Warning>
+  **Do not use versioned model names** like `claude-sonnet-4-20250514`. Use short names: `claude-opus-4.6`, `claude-sonnet-4.6`, etc.
+</Warning>
+
+<Tip>
+  You do **not** need `CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS` or `DISABLE_PROMPT_CACHING`. The API handles beta headers and caching fields natively.
+</Tip>

@@ -1,0 +1,51 @@
+---
+title: Zed
+description: Configure the Zed editor to use Lightweight as an AI provider.
+---
+
+[Zed](https://zed.dev) is a high-performance code editor with built-in AI features. Connect it to Lightweight by editing your `settings.json`.
+
+## Setup
+
+Open your Zed settings file and add the Lightweight configuration to the `language_models` block:
+
+**File:** `~/.config/zed/settings.json` (Linux) or `~/Library/Application Support/Zed/settings.json` (macOS)
+
+```json
+{
+  "language_models": {
+    "openai": {
+      "api_url": "https://api.lightweight.one/v1",
+      "api_key": "lw_sk_your-key-here",
+      "available_models": [
+        {
+          "name": "claude-opus-4.6",
+          "display_name": "Claude Opus 4.6",
+          "max_tokens": 200000
+        },
+        {
+          "name": "claude-sonnet-4.5",
+          "display_name": "Claude Sonnet 4.5",
+          "max_tokens": 200000
+        },
+        {
+          "name": "gpt-5.4",
+          "display_name": "GPT-5.4",
+          "max_tokens": 128000
+        },
+        {
+          "name": "gemini-2.5-pro",
+          "display_name": "Gemini 2.5 Pro",
+          "max_tokens": 1000000
+        }
+      ]
+    }
+  }
+}
+```
+
+<Tip>
+  Add any model from the [catalog](/models) to the `available_models` array. The `name` field must match the exact model ID.
+</Tip>
+
+After saving the settings, restart Zed. Your Lightweight models will appear in the AI model selector.

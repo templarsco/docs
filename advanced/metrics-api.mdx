@@ -1,0 +1,60 @@
+---
+title: Metrics API
+description: Real-time performance data for all models.
+---
+
+Access real-time performance data including latency, throughput, uptime, and token usage. No authentication required.
+
+## Endpoint
+
+```
+GET https://api.lightweight.one/api/metrics
+```
+
+## Query Parameters
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `period` | string | `24h` | Time range: `1h`, `24h`, `7d`, `30d` |
+| `model` | string | — | Filter by model ID |
+
+## Example Requests
+
+```bash
+# Default 24h metrics for all models
+curl https://api.lightweight.one/api/metrics
+
+# 7-day metrics for a specific model
+curl "https://api.lightweight.one/api/metrics?period=7d&model=gpt-4.1"
+```
+
+## Response Format
+
+```json
+{
+  "models": [
+    {
+      "id": "claude-opus-4.6",
+      "latency": { "avg": 5200, "p50": 4100, "p95": 12000, "p99": 25000 },
+      "throughput": { "avg": 32.5, "p50": 30.0, "p95": 55.0 },
+      "uptime": 99.91,
+      "requests": 1250,
+      "tokens": { "input": 15000000, "output": 500000, "total": 15500000 },
+      "timeseries": [
+        { "time": "2026-03-25 10:00:00", "latency_avg": 5100, "requests": 45, "error_rate": 0 }
+      ]
+    }
+  ],
+  "global": {
+    "total_requests": 5000,
+    "total_tokens": 50000000,
+    "uptime": 99.91,
+    "period": "24h",
+    "updated_at": "2026-03-25T14:00:00Z"
+  }
+}
+```
+
+<Note>
+  Data refreshes every 30 seconds. Powered by Cloudflare Analytics Engine with 90-day retention. See the live dashboard at [lightweight.one/status](https://lightweight.one/status).
+</Note>
