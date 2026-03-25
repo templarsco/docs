@@ -5,21 +5,55 @@ description: Frequently asked questions about the Lightweight API.
 
 <AccordionGroup>
   <Accordion title="What models are available?">
-    Lightweight provides unified access to 25+ frontier and efficient models from OpenAI, Anthropic, Google, and xAI. See the [Models Catalog](/models) for the complete list, or query `GET /v1/models` for the live catalog.
+    Lightweight gives you access to **25+ models** from OpenAI, Anthropic, Google, and xAI — all through a single API key. This includes GPT-5.4, Claude Opus 4.6, Gemini 3.1 Pro, Grok, and many more.
+
+    Browse the full list on the [Models](/models) page or call `GET /v1/models` for the live catalog.
   </Accordion>
-  <Accordion title="Is this OpenAI-compatible?">
-    Yes. Lightweight is a drop-in replacement for the OpenAI API. Change your Base URL to `https://api.lightweight.one/v1` and use your Lightweight API key. No code changes needed.
+
+  <Accordion title="Is the API OpenAI-compatible?">
+    Yes — **100% OpenAI-compatible**. The primary endpoint is `POST /v1/chat/completions`, which follows the exact same request and response format as the OpenAI API.
+
+    Any tool, SDK, or library that works with OpenAI will work with Lightweight by simply changing the base URL and API key. No code changes, no wrapper libraries, no workaround flags.
   </Accordion>
+
   <Accordion title="How do I check my usage?">
-    Use the [Dashboard](https://lightweight.one/dashboard) for a visual overview, or query `GET /v1/usage` for programmatic access.
+    You can check your token usage and remaining quota in two ways:
+
+    1. **API**: Call `GET /v1/usage` with your API key.
+    2. **Dashboard**: Visit the [Lightweight Dashboard](https://lightweight.one/dashboard) for a visual breakdown of your consumption.
+
+    ```bash
+    curl https://api.lightweight.one/v1/usage \
+      -H "Authorization: Bearer lw_sk_your-key-here"
+    ```
   </Accordion>
-  <Accordion title="What happens when I hit my limit?">
-    You'll receive a `429 Too Many Requests` HTTP response with a `Retry-After` header indicating how long to wait.
+
+  <Accordion title="What happens when I hit my rate limit?">
+    You'll receive a `429 Too Many Requests` response. The response includes a `Retry-After` header that tells you exactly how many seconds to wait before retrying.
+
+    Rate limits are per API key and measured in requests per minute (RPM). See [Rate Limits](/rate-limits) for tier details.
   </Accordion>
-  <Accordion title="Can I use streaming?">
-    Yes. Add `"stream": true` to your request payload. Responses use Server-Sent Events (SSE) format matching the OpenAI specification.
+
+  <Accordion title="Does Lightweight support streaming?">
+    Yes. Add `"stream": true` to your request body and the API will return server-sent events (SSE) — exactly like the OpenAI streaming format.
+
+    Streaming works with **every model** in the catalog, regardless of provider.
+
+    ```bash
+    curl https://api.lightweight.one/v1/chat/completions \
+      -H "Authorization: Bearer lw_sk_your-key-here" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "model": "claude-sonnet-4.5",
+        "messages": [{"role": "user", "content": "Hello!"}],
+        "stream": true
+      }'
+    ```
   </Accordion>
-  <Accordion title="How do I get an invite?">
-    Lightweight is in invite-only beta. Open a [Discussion](https://github.com/templarsco/lightweight/discussions) in the Access Requests category to request access.
+
+  <Accordion title="How do I get an invite / API key?">
+    Lightweight is currently in **beta**. You can request access and get your API key from the [Dashboard](https://lightweight.one/dashboard).
+
+    Once approved, your key will start with `lw_sk_` and you can start making API calls immediately.
   </Accordion>
 </AccordionGroup>

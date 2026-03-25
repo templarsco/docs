@@ -105,20 +105,3 @@ Each model object in the response `data` array contains:
   ]
 }
 ```
-
----
-
-## OpenRouter Format
-
-For tools that expect the OpenRouter model format, append `?format=openrouter` to the request:
-
-```bash
-curl "https://api.lightweight.one/v1/models?format=openrouter" \
-  -H "Authorization: Bearer lw_sk_your-key-here"
-```
-
-This returns models with OpenRouter-compatible field names and structure, making it easier to integrate with tools built for the OpenRouter ecosystem.
-
-<Note>
-  The OpenRouter format is a convenience wrapper — the same models and data are returned, just structured differently to match OpenRouter's schema.
-</Note>

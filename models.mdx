@@ -1,83 +1,102 @@
 ---
-title: Models Catalog
-description: All available models by provider with context windows and capabilities.
+title: Models
+description: Browse every model available through the Lightweight API — 25+ models from OpenAI, Anthropic, Google, and xAI.
 ---
 
-Lightweight provides access to **25+ models** from 4 providers. The live catalog is always available at `GET /v1/models`.
+Lightweight gives you access to **25+ models** from four providers through a single API key. Every model works with the same `POST /v1/chat/completions` endpoint.
+
+<Tip>
+  For the live, always-up-to-date catalog, call `GET /v1/models`. See the [Models API reference](/advanced/models-api) for full details.
+</Tip>
+
+---
 
 ## OpenAI
 
-| Model | Context | Status |
-|-------|---------|--------|
-| `gpt-5.4` | 200K | Stable |
-| `gpt-5.4-mini` | 200K | Stable |
-| `gpt-5.2` | 200K | Stable |
-| `gpt-5.1` | 200K | Stable |
-| `gpt-5.1-codex` | 400K | Stable |
-| `gpt-5.1-codex-max` | 400K | Stable |
-| `gpt-5.1-codex-mini` | 400K | Preview |
-| `gpt-5.2-codex` | 400K | Stable |
-| `gpt-5.3-codex` | 400K | Stable |
-| `gpt-5-mini` | 200K | Stable |
-| `gpt-4.1` | 128K | Stable |
-| `gpt-4o` | 128K | Stable |
-| `gpt-4o-mini` | 128K | Stable |
+| Model | Context Window | Status |
+|-------|---------------|--------|
+| `gpt-5.4` | 128K | Available |
+| `gpt-5.4-mini` | 128K | Available |
+| `gpt-5.2` | 128K | Available |
+| `gpt-5.1` | 1M | Available |
+| `gpt-5.1-codex` | 1M | Available |
+| `gpt-5-mini` | 128K | Available |
+| `gpt-4.1` | 1M | Available |
+| `gpt-4.1-mini` | 1M | Available |
+| `gpt-4.1-nano` | 1M | Available |
+| `gpt-4o` | 128K | Available |
+| `gpt-4o-mini` | 128K | Available |
+| `o3` | 200K | Available |
+| `o3-mini` | 200K | Available |
+| `o4-mini` | 200K | Available |
 
 ## Anthropic
 
-| Model | Context | Status |
-|-------|---------|--------|
-| `claude-opus-4.6` | 200K | Stable |
-| `claude-opus-4.6-fast` | 200K | Preview |
-| `claude-sonnet-4.6` | 200K | Stable |
-| `claude-sonnet-4.5` | 200K | Stable |
-| `claude-sonnet-4` | 200K | Stable |
-| `claude-opus-4.5` | 200K | Stable |
-| `claude-haiku-4.5` | 200K | Stable |
-
-<Note>
-  **Extended thinking** is supported for Claude models. The model reasons internally and thinking blocks are returned in the API response.
-</Note>
+| Model | Context Window | Status |
+|-------|---------------|--------|
+| `claude-opus-4.6` | 200K | Available |
+| `claude-opus-4.6-fast` | 200K | Available |
+| `claude-sonnet-4.6` | 200K | Available |
+| `claude-sonnet-4.5` | 200K | Available |
+| `claude-opus-4.5` | 200K | Available |
+| `claude-haiku-4.5` | 200K | Available |
 
 ## Google
 
-| Model | Context | Status |
-|-------|---------|--------|
-| `gemini-2.5-pro` | 1M | Stable |
-| `gemini-3-flash-preview` | 1M | Preview |
-| `gemini-3-pro-preview` | 1M | Preview |
-| `gemini-3.1-pro-preview` | 1M | Preview |
+| Model | Context Window | Status |
+|-------|---------------|--------|
+| `gemini-3.1-pro` | 1M | Available |
+| `gemini-2.5-pro` | 1M | Available |
+| `gemini-3-flash` | 1M | Available |
 
 ## xAI
 
-| Model | Context | Status |
-|-------|---------|--------|
-| `grok-code-fast-1` | 128K | Preview |
+| Model | Context Window | Status |
+|-------|---------------|--------|
+| `grok-code-fast-1` | 128K | Available |
+
+---
 
 ## Model Aliases
 
-For convenience, you can use these short names:
+For convenience, Lightweight supports short alias names that resolve to the latest version:
 
 | Alias | Resolves To |
 |-------|-------------|
 | `claude-opus` | `claude-opus-4.6` |
 | `claude-sonnet` | `claude-sonnet-4.6` |
-| `claude-fast` | `claude-opus-4.6-fast` |
-| `opus-fast` | `claude-opus-4.6-fast` |
-| `opus-4.6` | `claude-opus-4.6` |
-| `sonnet-4.6` | `claude-sonnet-4.6` |
+| `claude-haiku` | `claude-haiku-4.5` |
+| `gpt` | `gpt-5.4` |
+| `gemini-pro` | `gemini-3.1-pro` |
+| `gemini-flash` | `gemini-3-flash` |
 
-<Warning>
-  **Do not use versioned model names** like `claude-sonnet-4-20250514` or `claude-haiku-4-5-20251001`. Use the short names listed above.
-</Warning>
+<Note>
+  Aliases always point to the latest stable version. If you need deterministic behavior, use the full model name (e.g. `claude-opus-4.6` instead of `claude-opus`).
+</Note>
+
+---
+
+## Extended Thinking
+
+Anthropic Claude models support **extended thinking** (chain-of-thought) when you pass the appropriate parameter. This allows the model to reason through complex problems step by step before responding.
+
+Extended thinking is supported on:
+- `claude-opus-4.6`
+- `claude-opus-4.6-fast`
+- `claude-sonnet-4.6`
+- `claude-sonnet-4.5`
+
+See the [Anthropic SDK integration guide](/integrations/anthropic-sdk) for usage examples.
+
+---
 
 ## Live Catalog
 
-Query the API for the always-current list:
+The model list above is a point-in-time snapshot. For the always-current catalog, use the API:
 
 ```bash
 curl https://api.lightweight.one/v1/models \
   -H "Authorization: Bearer lw_sk_your-key-here"
 ```
 
-See [Models API](/advanced/models-api) for the full response schema.
+See [Models API](/advanced/models-api) for full response schema and filtering options.

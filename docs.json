@@ -54,7 +54,6 @@
             "pages": [
               "advanced/models-api",
               "advanced/opencode-plugin",
-              "advanced/openrouter",
               "advanced/metrics-api"
             ]
           },

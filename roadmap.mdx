@@ -1,22 +1,15 @@
 ---
 title: Roadmap
-description: Upcoming features and planned improvements.
+description: What's coming next for the Lightweight API.
 ---
 
-## v1.x — Next
+## v1.x — Embeddings API
 
-### Embeddings API
+We're adding support for embeddings models through the standard OpenAI-compatible `/v1/embeddings` endpoint. This will let you generate vector embeddings from multiple providers using the same unified API.
 
-New `/v1/embeddings` endpoint for generating text embeddings — numerical vectors that capture semantic meaning.
-
-**Use cases:**
-- **Semantic search** — Find documents by meaning, not keywords
-- **RAG** — Embed docs, retrieve context, feed to LLM
-- **Classification** — Group similar content automatically
-- **Duplicate detection** — Identify semantically similar items
+**Preview:**
 
 ```bash
-# Coming soon
 curl https://api.lightweight.one/v1/embeddings \
   -H "Authorization: Bearer lw_sk_your-key-here" \
   -H "Content-Type: application/json" \
@@ -26,18 +19,21 @@ curl https://api.lightweight.one/v1/embeddings \
   }'
 ```
 
-## v2 — Future
-
-### Agent Skills
-
-First-class support for the Agent Skills standard — versioned instruction bundles adopted by OpenAI, Anthropic, and 30+ AI tools.
-
-**What's planned:**
-- Skills registry integration (compatible with 89K+ community skills)
-- Cross-provider compatibility
-- SKILL.md format support
-- API-level skill management endpoints
-
 <Note>
-  Timeline to be announced. The ecosystem is rapidly evolving.
+  The Embeddings API is currently in development. Join the [community discussions](https://github.com/templarsco/lightweight/discussions) to follow progress and share feedback.
 </Note>
+
+---
+
+## v2 — Agent Skills
+
+Version 2 will introduce **Agent Skills** — a framework for connecting AI models to tools and external services through the Lightweight gateway.
+
+Agent Skills will allow you to:
+
+- Define tool schemas and connect them to any model
+- Execute multi-step agent workflows across providers
+- Chain models together (e.g., use a fast model for routing and a flagship model for generation)
+- Access built-in skills for common tasks like web search, code execution, and file management
+
+More details will be shared as development progresses. Stay tuned on the [Dashboard](https://lightweight.one/dashboard) and [GitHub](https://github.com/templarsco/lightweight/discussions).

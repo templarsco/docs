@@ -1,18 +1,57 @@
 ---
 title: Rate Limits
-description: Request limits by account tier.
+description: Requests-per-minute tiers and how to handle rate limiting.
 ---
 
-To ensure fair usage across the beta, we enforce RPM (Requests Per Minute) limits based on your account tier.
+Lightweight enforces per-key rate limits measured in **requests per minute (RPM)**. Your limit depends on your plan tier.
 
-| Account Tier | Requests Per Minute (RPM) |
-|--------------|---------------------------|
-| Beta Access | 60 RPM |
-| Pro Tier | 250 RPM |
-| Enterprise | Custom |
+## RPM Tiers
+
+| Plan | Requests per Minute (RPM) |
+|------|--------------------------|
+| **Beta** | 60 |
+| **Pro** | 250 |
+| **Enterprise** | Custom |
 
 <Note>
-  When rate limited, the response includes a `Retry-After` header indicating how many seconds to wait before retrying.
+  Rate limits apply per API key, not per model. All requests across all models count toward your RPM limit.
 </Note>
 
-If you receive a `429 Too Many Requests` response, wait for the specified duration and retry.
+---
+
+## Handling Rate Limits
+
+When you exceed your RPM limit, the API returns a `429 Too Many Requests` response with a `Retry-After` header.
+
+**Example response headers:**
+
+```
+HTTP/1.1 429 Too Many Requests
+Retry-After: 12
+Content-Type: application/json
+```
+
+**Example response body:**
+
+```json
+{
+  "error": {
+    "message": "Rate limit exceeded. Please retry after 12 seconds.",
+    "type": "rate_limit_error",
+    "code": 429
+  }
+}
+```
+
+---
+
+## Best Practices
+
+1. **Read the `Retry-After` header** — it tells you exactly how many seconds to wait before retrying.
+2. **Implement exponential backoff** — start with the `Retry-After` value, then double the wait time on consecutive failures.
+3. **Queue requests** — if you're making many requests, use a queue with a rate limiter to stay under your RPM ceiling.
+4. **Monitor usage** — use `GET /v1/usage` or the [Dashboard](https://lightweight.one/dashboard) to track your consumption.
+
+<Tip>
+  Need higher limits? [Contact us](https://lightweight.one/contact) for Enterprise plans with custom RPM quotas.
+</Tip>

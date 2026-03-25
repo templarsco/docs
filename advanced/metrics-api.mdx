@@ -1,9 +1,9 @@
 ---
 title: Metrics API
-description: Real-time performance data for all models.
+description: Query detailed usage metrics and analytics for your Lightweight API key.
 ---
 
-Access real-time performance data including latency, throughput, uptime, and token usage. No authentication required.
+The `GET /api/metrics` endpoint returns detailed usage analytics — token consumption, request counts, and cost breakdowns by model and time period.
 
 ## Endpoint
 
@@ -11,50 +11,97 @@ Access real-time performance data including latency, throughput, uptime, and tok
 GET https://api.lightweight.one/api/metrics
 ```
 
+```bash
+curl "https://api.lightweight.one/api/metrics" \
+  -H "Authorization: Bearer lw_sk_your-key-here"
+```
+
+---
+
 ## Query Parameters
 
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `period` | string | `24h` | Time range: `1h`, `24h`, `7d`, `30d` |
-| `model` | string | — | Filter by model ID |
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `period` | string | No | Time period to aggregate. Options: `hour`, `day`, `week`, `month`. Defaults to `day`. |
+| `model` | string | No | Filter metrics to a specific model ID (e.g. `claude-sonnet-4.5`). |
 
-## Example Requests
-
-```bash
-# Default 24h metrics for all models
-curl https://api.lightweight.one/api/metrics
-
-# 7-day metrics for a specific model
-curl "https://api.lightweight.one/api/metrics?period=7d&model=gpt-4.1"
-```
+---
 
 ## Response Format
 
 ```json
 {
-  "models": [
+  "period": "day",
+  "start": "2026-03-24T00:00:00Z",
+  "end": "2026-03-25T00:00:00Z",
+  "totals": {
+    "requests": 1542,
+    "input_tokens": 3250000,
+    "output_tokens": 890000,
+    "total_tokens": 4140000,
+    "cost_usd": 12.45
+  },
+  "by_model": [
     {
-      "id": "claude-opus-4.6",
-      "latency": { "avg": 5200, "p50": 4100, "p95": 12000, "p99": 25000 },
-      "throughput": { "avg": 32.5, "p50": 30.0, "p95": 55.0 },
-      "uptime": 99.91,
-      "requests": 1250,
-      "tokens": { "input": 15000000, "output": 500000, "total": 15500000 },
-      "timeseries": [
-        { "time": "2026-03-25 10:00:00", "latency_avg": 5100, "requests": 45, "error_rate": 0 }
-      ]
+      "model": "claude-sonnet-4.5",
+      "requests": 820,
+      "input_tokens": 1800000,
+      "output_tokens": 520000,
+      "total_tokens": 2320000,
+      "cost_usd": 7.80
+    },
+    {
+      "model": "gpt-5.4",
+      "requests": 450,
+      "input_tokens": 950000,
+      "output_tokens": 280000,
+      "total_tokens": 1230000,
+      "cost_usd": 3.55
+    },
+    {
+      "model": "gemini-2.5-pro",
+      "requests": 272,
+      "input_tokens": 500000,
+      "output_tokens": 90000,
+      "total_tokens": 590000,
+      "cost_usd": 1.10
     }
-  ],
-  "global": {
-    "total_requests": 5000,
-    "total_tokens": 50000000,
-    "uptime": 99.91,
-    "period": "24h",
-    "updated_at": "2026-03-25T14:00:00Z"
-  }
+  ]
 }
 ```
 
-<Note>
-  Data refreshes every 30 seconds. Powered by Cloudflare Analytics Engine with 90-day retention. See the live dashboard at [lightweight.one/status](https://lightweight.one/status).
-</Note>
+---
+
+## Example Requests
+
+### Default — Last Day
+
+```bash
+curl "https://api.lightweight.one/api/metrics" \
+  -H "Authorization: Bearer lw_sk_your-key-here"
+```
+
+### Last Week
+
+```bash
+curl "https://api.lightweight.one/api/metrics?period=week" \
+  -H "Authorization: Bearer lw_sk_your-key-here"
+```
+
+### Filtered by Model
+
+```bash
+curl "https://api.lightweight.one/api/metrics?model=claude-sonnet-4.5&period=month" \
+  -H "Authorization: Bearer lw_sk_your-key-here"
+```
+
+### Last Hour
+
+```bash
+curl "https://api.lightweight.one/api/metrics?period=hour" \
+  -H "Authorization: Bearer lw_sk_your-key-here"
+```
+
+<Tip>
+  For a quick overview of your remaining quota, use `GET /v1/usage` instead. The Metrics API is for detailed analytics and cost tracking.
+</Tip>

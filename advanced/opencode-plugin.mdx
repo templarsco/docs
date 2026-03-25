@@ -1,9 +1,9 @@
 ---
 title: OpenCode Plugin
-description: Native OpenCode integration with automatic model discovery.
+description: Deep integration with OpenCode using the official Lightweight plugin.
 ---
 
-The `@lightweight/opencode-plugin` package provides native integration between OpenCode and the Lightweight API with automatic model discovery, auth, and streaming.
+The `@lightweight/opencode-plugin` package provides a deeper integration with [OpenCode](https://opencode.ai) than the generic OpenAI-compatible setup. It adds model discovery, usage tracking, and automatic configuration.
 
 ## Installation
 
@@ -13,31 +13,66 @@ npm install @lightweight/opencode-plugin
 
 ## Configuration
 
-Add to your `opencode.json`:
+### opencode.json
+
+Add the plugin to your `opencode.json` configuration file:
 
 ```json
 {
-  "plugins": ["@lightweight/opencode-plugin"],
-  "env": {
-    "LIGHTWEIGHT_API_KEY": "lw_sk_your-key-here"
-  }
+  "plugins": [
+    {
+      "name": "@lightweight/opencode-plugin",
+      "config": {
+        "apiKey": "lw_sk_your-key-here",
+        "defaultModel": "claude-sonnet-4.5"
+      }
+    }
+  ]
 }
 ```
 
-## Environment Variable
+### Configuration Options
 
-Alternatively, set the key via environment:
+| Option | Type | Required | Description |
+|--------|------|----------|-------------|
+| `apiKey` | string | Yes | Your Lightweight API key |
+| `defaultModel` | string | No | Default model to use (defaults to `gpt-5.4`) |
+| `baseUrl` | string | No | Custom base URL (defaults to `https://api.lightweight.one/v1`) |
 
-```bash
-export LIGHTWEIGHT_API_KEY="lw_sk_your-key-here"
+## Environment Variable Alternative
+
+If you prefer not to store your API key in the config file, set it as an environment variable:
+
+<Tabs>
+  <Tab title="Bash / macOS / Linux">
+    ```bash
+    export LIGHTWEIGHT_API_KEY="lw_sk_your-key-here"
+    ```
+  </Tab>
+  <Tab title="PowerShell / Windows">
+    ```powershell
+    $env:LIGHTWEIGHT_API_KEY = "lw_sk_your-key-here"
+    ```
+  </Tab>
+</Tabs>
+
+Then simplify your `opencode.json`:
+
+```json
+{
+  "plugins": [
+    {
+      "name": "@lightweight/opencode-plugin",
+      "config": {
+        "defaultModel": "claude-sonnet-4.5"
+      }
+    }
+  ]
+}
 ```
 
-## Verify
+The plugin will automatically read the `LIGHTWEIGHT_API_KEY` environment variable.
 
-Launch OpenCode — the plugin auto-registers all Lightweight models:
-
-```bash
-opencode
-```
-
-Select any model from the catalog and send a test prompt.
+<Tip>
+  The plugin automatically discovers all available models from the Lightweight catalog, so they appear in OpenCode's model selector without manual configuration.
+</Tip>

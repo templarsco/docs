@@ -1,114 +1,213 @@
 ---
 title: Claude Code
-description: Set up Claude Code CLI with the Lightweight API.
+description: Use Claude Code with Lightweight to access every model through a single API key — no workaround flags needed.
 ---
 
-Lightweight fully supports Claude Code with native compatibility — no workaround flags needed.
+[Claude Code](https://docs.anthropic.com/en/docs/claude-code) is Anthropic's CLI coding agent. With Lightweight, you can run Claude Code against **any model in the catalog** — including OpenAI, Google, and xAI models — through the native Anthropic interface.
+
+<Note>
+  Lightweight's Anthropic-compatible endpoint means Claude Code works **natively** — no workaround flags, no shims, no extra configuration needed.
+</Note>
+
+---
 
 ## Setup
 
+Set two environment variables to point Claude Code at Lightweight:
+
 <Tabs>
   <Tab title="Bash / macOS / Linux">
-    Add to your shell profile (`~/.bashrc`, `~/.zshrc`, etc.):
-
     ```bash
-    export ANTHROPIC_BASE_URL="https://api.lightweight.one"
+    export ANTHROPIC_BASE_URL="https://api.lightweight.one/v1"
     export ANTHROPIC_API_KEY="lw_sk_your-key-here"
     ```
 
-    Then reload and run:
+    Add these to your `~/.bashrc`, `~/.zshrc`, or `~/.profile` to persist across sessions:
 
     ```bash
-    source ~/.zshrc  # or ~/.bashrc
+    echo 'export ANTHROPIC_BASE_URL="https://api.lightweight.one/v1"' >> ~/.zshrc
+    echo 'export ANTHROPIC_API_KEY="lw_sk_your-key-here"' >> ~/.zshrc
+    source ~/.zshrc
+    ```
+  </Tab>
+  <Tab title="PowerShell / Windows">
+    ```powershell
+    $env:ANTHROPIC_BASE_URL = "https://api.lightweight.one/v1"
+    $env:ANTHROPIC_API_KEY = "lw_sk_your-key-here"
+    ```
+
+    To persist across sessions, set them as system environment variables:
+
+    ```powershell
+    [System.Environment]::SetEnvironmentVariable("ANTHROPIC_BASE_URL", "https://api.lightweight.one/v1", "User")
+    [System.Environment]::SetEnvironmentVariable("ANTHROPIC_API_KEY", "lw_sk_your-key-here", "User")
+    ```
+  </Tab>
+</Tabs>
+
+Then launch Claude Code as usual:
+
+```bash
+claude
+```
+
+That's it — Claude Code will now route all requests through Lightweight.
+
+---
+
+## Model Selection Overrides
+
+By default, Claude Code uses its standard model selection. You can override which model is used for each role with environment variables:
+
+<Tabs>
+  <Tab title="Bash / macOS / Linux">
+    ```bash
+    # Use Opus 4.6 as the primary model
+    export CLAUDE_CODE_USE_BEDROCK=0
+    export CLAUDE_MODEL="claude-opus-4.6"
+
+    # Override the "big" model (Opus-class tasks)
+    export CLAUDE_OPUS_MODEL="claude-opus-4.6"
+
+    # Override the "mid" model (Sonnet-class tasks)
+    export CLAUDE_SONNET_MODEL="claude-sonnet-4.6"
+
+    # Override the "small" model (Haiku-class tasks)
+    export CLAUDE_HAIKU_MODEL="claude-haiku-4.5"
+    ```
+  </Tab>
+  <Tab title="PowerShell / Windows">
+    ```powershell
+    $env:CLAUDE_CODE_USE_BEDROCK = "0"
+    $env:CLAUDE_MODEL = "claude-opus-4.6"
+
+    # Override the "big" model (Opus-class tasks)
+    $env:CLAUDE_OPUS_MODEL = "claude-opus-4.6"
+
+    # Override the "mid" model (Sonnet-class tasks)
+    $env:CLAUDE_SONNET_MODEL = "claude-sonnet-4.6"
+
+    # Override the "small" model (Haiku-class tasks)
+    $env:CLAUDE_HAIKU_MODEL = "claude-haiku-4.5"
+    ```
+  </Tab>
+</Tabs>
+
+---
+
+## Fast Mode with claude-opus-4.6-fast
+
+Lightweight offers `claude-opus-4.6-fast` — an optimized routing configuration that delivers **lower latency** for Opus-class tasks. This is ideal for interactive Claude Code sessions where responsiveness matters.
+
+<Tabs>
+  <Tab title="Bash / macOS / Linux">
+    ```bash
+    export ANTHROPIC_BASE_URL="https://api.lightweight.one/v1"
+    export ANTHROPIC_API_KEY="lw_sk_your-key-here"
+    export CLAUDE_MODEL="claude-opus-4.6-fast"
+    export CLAUDE_OPUS_MODEL="claude-opus-4.6-fast"
+    ```
+  </Tab>
+  <Tab title="PowerShell / Windows">
+    ```powershell
+    $env:ANTHROPIC_BASE_URL = "https://api.lightweight.one/v1"
+    $env:ANTHROPIC_API_KEY = "lw_sk_your-key-here"
+    $env:CLAUDE_MODEL = "claude-opus-4.6-fast"
+    $env:CLAUDE_OPUS_MODEL = "claude-opus-4.6-fast"
+    ```
+  </Tab>
+</Tabs>
+
+<Tip>
+  `claude-opus-4.6-fast` uses the same model with optimized routing for faster first-token times. Same quality, lower latency.
+</Tip>
+
+---
+
+## settings.json Alternative
+
+If you prefer not to use environment variables, you can configure Claude Code via its `settings.json` file:
+
+<Tabs>
+  <Tab title="macOS / Linux">
+    Edit `~/.claude/settings.json`:
+
+    ```json
+    {
+      "apiBaseUrl": "https://api.lightweight.one/v1",
+      "apiKey": "lw_sk_your-key-here",
+      "model": "claude-opus-4.6"
+    }
+    ```
+  </Tab>
+  <Tab title="Windows">
+    Edit `%APPDATA%\claude\settings.json`:
+
+    ```json
+    {
+      "apiBaseUrl": "https://api.lightweight.one/v1",
+      "apiKey": "lw_sk_your-key-here",
+      "model": "claude-opus-4.6"
+    }
+    ```
+  </Tab>
+</Tabs>
+
+---
+
+## Extended Thinking
+
+Claude models accessed through Lightweight support **extended thinking** (chain-of-thought reasoning). When enabled, the model will reason through complex problems step by step before producing a response.
+
+Extended thinking is automatically available when using Claude Code with Lightweight — no additional configuration is needed. Claude Code will use extended thinking when appropriate based on the complexity of your prompt.
+
+Supported models:
+- `claude-opus-4.6`
+- `claude-opus-4.6-fast`
+- `claude-sonnet-4.6`
+- `claude-sonnet-4.5`
+
+---
+
+## Full Example
+
+Here's a complete setup for the best Claude Code experience with Lightweight:
+
+<Tabs>
+  <Tab title="Bash / macOS / Linux">
+    ```bash
+    # Core configuration
+    export ANTHROPIC_BASE_URL="https://api.lightweight.one/v1"
+    export ANTHROPIC_API_KEY="lw_sk_your-key-here"
+
+    # Use fast Opus for primary tasks, Sonnet for lighter tasks
+    export CLAUDE_MODEL="claude-opus-4.6-fast"
+    export CLAUDE_OPUS_MODEL="claude-opus-4.6-fast"
+    export CLAUDE_SONNET_MODEL="claude-sonnet-4.6"
+    export CLAUDE_HAIKU_MODEL="claude-haiku-4.5"
+
+    # Launch Claude Code
     claude
     ```
   </Tab>
   <Tab title="PowerShell / Windows">
-    For the current session:
-
     ```powershell
-    $env:ANTHROPIC_BASE_URL = "https://api.lightweight.one"
+    # Core configuration
+    $env:ANTHROPIC_BASE_URL = "https://api.lightweight.one/v1"
     $env:ANTHROPIC_API_KEY = "lw_sk_your-key-here"
+
+    # Use fast Opus for primary tasks, Sonnet for lighter tasks
+    $env:CLAUDE_MODEL = "claude-opus-4.6-fast"
+    $env:CLAUDE_OPUS_MODEL = "claude-opus-4.6-fast"
+    $env:CLAUDE_SONNET_MODEL = "claude-sonnet-4.6"
+    $env:CLAUDE_HAIKU_MODEL = "claude-haiku-4.5"
+
+    # Launch Claude Code
     claude
     ```
-
-    For permanent setup, add to your PowerShell profile (`$PROFILE`).
   </Tab>
 </Tabs>
-
-## Model Selection
-
-Override which models Claude Code uses for each tier:
-
-<Tabs>
-  <Tab title="Bash">
-    ```bash
-    export ANTHROPIC_DEFAULT_OPUS_MODEL="claude-opus-4.6"    # Complex tasks
-    export ANTHROPIC_DEFAULT_SONNET_MODEL="claude-sonnet-4.6" # Default tier
-    export ANTHROPIC_DEFAULT_HAIKU_MODEL="claude-haiku-4.5"   # Fast/cheap
-    ```
-  </Tab>
-  <Tab title="PowerShell">
-    ```powershell
-    $env:ANTHROPIC_DEFAULT_OPUS_MODEL = "claude-opus-4.6"
-    $env:ANTHROPIC_DEFAULT_SONNET_MODEL = "claude-sonnet-4.6"
-    $env:ANTHROPIC_DEFAULT_HAIKU_MODEL = "claude-haiku-4.5"
-    ```
-  </Tab>
-</Tabs>
-
-## Fast Mode (Reduced Latency)
-
-Use the lower-latency variant of Claude Opus:
-
-<Tabs>
-  <Tab title="Bash">
-    ```bash
-    export ANTHROPIC_DEFAULT_OPUS_MODEL="claude-opus-4.6-fast"
-    ```
-  </Tab>
-  <Tab title="PowerShell">
-    ```powershell
-    $env:ANTHROPIC_DEFAULT_OPUS_MODEL = "claude-opus-4.6-fast"
-    ```
-  </Tab>
-</Tabs>
-
-<Note>
-  Claude Code's built-in `/fast` toggle is a server-side feature at Anthropic. Through the proxy, set the model explicitly to `claude-opus-4.6-fast` instead.
-</Note>
-
-## Alternative: settings.json
-
-Add to `~/.claude/settings.json`:
-
-```json
-{
-  "env": {
-    "ANTHROPIC_BASE_URL": "https://api.lightweight.one",
-    "ANTHROPIC_API_KEY": "lw_sk_your-key-here",
-    "ANTHROPIC_DEFAULT_OPUS_MODEL": "claude-opus-4.6",
-    "ANTHROPIC_DEFAULT_SONNET_MODEL": "claude-sonnet-4.6",
-    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "claude-haiku-4.5"
-  }
-}
-```
-
-## Features
-
-| Feature | Status |
-|---------|--------|
-| Chat & tool use | Fully supported |
-| Streaming | Fully supported |
-| Extended thinking | Supported — thinking blocks returned |
-| Prompt caching fields | Supported (pass-through) |
-| Beta headers | Accepted and handled |
-| 200K context | Full context window available |
 
 <Warning>
-  **Do not use versioned model names** like `claude-sonnet-4-20250514`. Use short names: `claude-opus-4.6`, `claude-sonnet-4.6`, etc.
+  **No workaround flags needed.** Unlike some third-party proxies, Lightweight's Anthropic-compatible endpoint works natively with Claude Code. Do not pass `--disable-prompt-caching` or similar flags — they are unnecessary and may degrade performance.
 </Warning>
-
-<Tip>
-  You do **not** need `CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS` or `DISABLE_PROMPT_CACHING`. The API handles beta headers and caching fields natively.
-</Tip>

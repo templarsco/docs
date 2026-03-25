@@ -1,47 +1,62 @@
 ---
 title: Pricing
-description: Token costs per model, per 1 million tokens.
+description: Token costs per model — Lightweight adds zero markup on top of provider prices.
 ---
 
-Prices reflect provider rates passed through Lightweight. **Lightweight adds no markup.**
+Lightweight charges per token with **zero markup** on top of the underlying provider's prices. Your token quota covers all models — no separate billing per provider.
+
+<Note>
+  All prices are per **1 million tokens**. Your Lightweight plan includes a token quota that can be used across any combination of models.
+</Note>
+
+---
 
 ## OpenAI
 
 | Model | Input $/1M | Output $/1M | Context | Category |
 |-------|-----------|------------|---------|----------|
-| `gpt-5.4` | $2.50 | $10.00 | 400K | Frontier |
-| `gpt-5.4-mini` | $0.75 | $4.50 | 400K | Efficient |
-| `gpt-5.1-codex` | $2.50 | $10.00 | 400K | Frontier |
-| `gpt-5-mini` | $0.25 | $2.00 | 264K | Efficient |
-| `gpt-4.1` | $2.00 | $8.00 | 1M | Frontier |
-| `gpt-4o` | $2.50 | $10.00 | 128K | Frontier |
-| `gpt-4o-mini` | $0.15 | $0.60 | 128K | Compact |
+| `gpt-5.4` | $2.50 | $10.00 | 128K | Flagship |
+| `gpt-5.4-mini` | $0.75 | $4.50 | 128K | Balanced |
+| `gpt-5.1-codex` | $2.50 | $10.00 | 1M | Code |
+| `gpt-5-mini` | $0.25 | $2.00 | 128K | Budget |
+| `gpt-4.1` | $2.00 | $8.00 | 1M | General |
+| `gpt-4o` | $2.50 | $10.00 | 128K | Multimodal |
+| `gpt-4o-mini` | $0.15 | $0.60 | 128K | Budget |
 
 ## Anthropic
 
 | Model | Input $/1M | Output $/1M | Context | Category |
 |-------|-----------|------------|---------|----------|
-| `claude-opus-4.6` | $5.00 | $25.00 | 200K | Frontier |
-| `claude-opus-4.6-fast` | $5.00 | $25.00 | 200K | Frontier |
-| `claude-sonnet-4.6` | $3.00 | $15.00 | 200K | Frontier |
-| `claude-sonnet-4.5` | $3.00 | $15.00 | 200K | Frontier |
-| `claude-opus-4.5` | $15.00 | $75.00 | 200K | Frontier |
-| `claude-haiku-4.5` | $1.00 | $5.00 | 200K | Efficient |
+| `claude-opus-4.6` | $5.00 | $25.00 | 200K | Flagship |
+| `claude-opus-4.6-fast` | $5.00 | $25.00 | 200K | Flagship (Fast) |
+| `claude-sonnet-4.6` | $3.00 | $15.00 | 200K | Balanced |
+| `claude-sonnet-4.5` | $3.00 | $15.00 | 200K | Balanced |
+| `claude-opus-4.5` | $15.00 | $75.00 | 200K | Premium |
+| `claude-haiku-4.5` | $1.00 | $5.00 | 200K | Budget |
 
 ## Google
 
 | Model | Input $/1M | Output $/1M | Context | Category |
 |-------|-----------|------------|---------|----------|
-| `gemini-3.1-pro-preview` | $2.00 | $12.00 | 1M | Frontier |
-| `gemini-2.5-pro` | $1.25 | $10.00 | 1M | Frontier |
-| `gemini-3-flash-preview` | $0.50 | $2.00 | 1M | Efficient |
+| `gemini-3.1-pro` | $2.00 | $12.00 | 1M | Flagship |
+| `gemini-2.5-pro` | $1.25 | $10.00 | 1M | General |
+| `gemini-3-flash` | $0.50 | $2.00 | 1M | Budget |
 
 ## xAI
 
 | Model | Input $/1M | Output $/1M | Context | Category |
 |-------|-----------|------------|---------|----------|
-| `grok-code-fast-1` | $0.30 | $0.50 | 131K | Efficient |
+| `grok-code-fast-1` | $0.30 | $0.50 | 128K | Code |
 
-<Note>
-  Your token quota covers all models. Dated model variants (e.g., `claude-sonnet-4-20250514`) use the same pricing as the base model.
-</Note>
+---
+
+## How Billing Works
+
+- **No markup**: Token prices match the upstream provider exactly.
+- **Unified quota**: Your plan's token quota is shared across all models and providers.
+- **Pay-as-you-go within quota**: Tokens are deducted from your quota based on the model's per-token cost.
+- **Usage tracking**: Check your remaining quota anytime via `GET /v1/usage` or the [Dashboard](https://lightweight.one/dashboard).
+
+<Tip>
+  Need more tokens? Upgrade your plan on the [Dashboard](https://lightweight.one/dashboard) or contact us for Enterprise pricing.
+</Tip>
