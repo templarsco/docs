@@ -46,7 +46,9 @@
               "integrations/openai-nodejs",
               "integrations/langchain",
               "integrations/litellm",
-              "integrations/any-tool"
+              "integrations/any-tool",
+              "integrations/codex-cli",
+              "integrations/codex-ide"
             ]
           },
           {
@@ -54,14 +56,16 @@
             "pages": [
               "advanced/models-api",
               "advanced/opencode-plugin",
-              "advanced/metrics-api"
+              "advanced/metrics-api",
+              "advanced/embeddings"
             ]
           },
           {
             "group": "Resources",
             "pages": [
               "faq",
-              "roadmap"
+              "roadmap",
+              "changelog"
             ]
           }
         ]
