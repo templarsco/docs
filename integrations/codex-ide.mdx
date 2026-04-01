@@ -1,0 +1,94 @@
+---
+title: Codex IDE
+description: Configure the OpenAI Codex VS Code extension to use Lightweight API as your AI gateway.
+---
+
+The Codex VS Code extension uses the same gateway configuration as the CLI. Once configured, all IDE operations -- code edits, shell commands, and multi-step tasks -- route through Lightweight API.
+
+<Note>
+  The IDE and CLI share `~/.codex/config.toml`. If you completed the [CLI setup](/integrations/codex-cli), the IDE is already configured.
+</Note>
+
+---
+
+## Prerequisites
+
+- **Codex VS Code extension** -- install from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=openai.codex)
+- **Lightweight API key** -- obtain a key from your gateway administrator
+- **CLI setup completed** -- follow the [Codex CLI guide](/integrations/codex-cli) first to create `config.toml`
+
+---
+
+## Known Issue
+
+<Warning>
+  **Custom model providers (#4558):** The VS Code extension may not respect custom `model_providers` in new conversations. If the extension sends a default model ID instead of your configured model, use the simpler configuration:
+
+  ```toml
+  openai_base_url = "https://api.lightweight.one/v1"
+  model = "gpt-5.4"
+  ```
+
+  This bypasses the `model_providers` mechanism and is confirmed to work reliably with the IDE. See [GitHub Issue #4558](https://github.com/openai/codex/issues/4558).
+</Warning>
+
+---
+
+## VS Code Settings
+
+Optional settings available in VS Code (Settings > Extensions > Codex):
+
+- `chat.fontSize` -- Controls chat text size
+- `chat.editor.fontSize` -- Controls code snippet text size
+- `chatgpt.openOnStartup` -- Auto-focus Codex sidebar on launch
+- `chatgpt.runCodexInWindowsSubsystemForLinux` -- Enable WSL mode on Windows
+
+These are VS Code-specific settings. Gateway configuration is handled entirely through `config.toml`.
+
+---
+
+## Verify It Works
+
+<Steps>
+  <Step title="Open VS Code">
+    Launch VS Code with the Codex extension installed.
+  </Step>
+  <Step title="Open the Codex panel">
+    Press `Ctrl+Shift+P` (or `Cmd+Shift+P` on macOS) and search for "Codex".
+  </Step>
+  <Step title="Submit a test prompt">
+    Type a simple prompt such as "What is 2+2?" and submit it.
+  </Step>
+  <Step title="Confirm the connection">
+    If tokens stream back with a response, the IDE is connected to the gateway.
+  </Step>
+</Steps>
+
+### Alternative: curl verification
+
+If the IDE is not available, verify the gateway accepts Codex-format requests directly:
+
+```bash
+curl -N -X POST https://api.lightweight.one/v1/responses \
+  -H "Authorization: Bearer $LIGHTWEIGHT_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"model":"gpt-5.4","input":"Say hello in one sentence","stream":true}'
+```
+
+Expected: SSE events streaming back (`response.created`, `response.output_text.delta`, `response.completed`).
+
+---
+
+## Platform Notes
+
+<Warning>
+  **Windows is experimental.** The Codex VS Code extension on Windows is marked as experimental. If you encounter sandbox errors or path resolution issues, open a WSL-based workspace in VS Code (Remote - WSL) and configure `config.toml` inside the WSL home directory. The gateway itself is platform-independent.
+</Warning>
+
+---
+
+## Troubleshooting
+
+- **Extension sends wrong model ID:** The gateway has broad alias resolution. Common variants like `gpt-5-codex`, `gpt5.4`, `gpt-54` all resolve correctly. If you see 404 errors, check the exact model ID in VS Code's Output panel (Codex channel) and verify it is in the gateway's model list.
+- **Model picker doesn't show gateway models ([#6963](https://github.com/openai/codex/issues/6963)):** Try adding a local model catalog. Run `curl -s https://api.lightweight.one/v1/models -H "Authorization: Bearer $LIGHTWEIGHT_API_KEY" > ~/.codex/gateway-models.json` then add `model_catalog_json = "~/.codex/gateway-models.json"` to `config.toml`.
+- **Cloud tasks bypass gateway:** Tasks delegated to "Codex Cloud" connect directly to OpenAI, not through the gateway. Use local/agent mode for gateway-routed tasks.

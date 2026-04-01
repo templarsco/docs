@@ -1,0 +1,122 @@
+---
+title: Codex CLI
+description: Configure the OpenAI Codex CLI to use Lightweight API as your AI gateway.
+---
+
+Lightweight API is an AI gateway that provides unified access to multiple AI providers through a single endpoint. By configuring the Codex CLI to route through the gateway, you get one API key that works across all supported models -- no need to manage separate provider credentials.
+
+<Note>
+  **Prerequisites:** [Codex CLI installed](https://developers.openai.com/codex) and a Lightweight API key.
+</Note>
+
+---
+
+## Setup
+
+<Steps>
+  <Step title="Install Codex CLI">
+    Follow the official [OpenAI Codex](https://developers.openai.com/codex) documentation to install the CLI on your system.
+  </Step>
+  <Step title="Create config.toml">
+    Create the Codex configuration directory and file:
+
+    ```bash
+    mkdir -p ~/.codex
+    ```
+
+    Add the following to `~/.codex/config.toml`:
+
+    ```toml
+    model = "gpt-5.4"
+    model_provider = "lightweight"
+
+    [model_providers.lightweight]
+    name = "Lightweight API"
+    base_url = "https://api.lightweight.one/v1"
+    env_key = "LIGHTWEIGHT_API_KEY"
+    wire_api = "responses"
+    ```
+  </Step>
+  <Step title="Set your API key">
+    <Tabs>
+      <Tab title="Bash / macOS / Linux">
+        ```bash
+        export LIGHTWEIGHT_API_KEY="your-api-key-here"
+        ```
+
+        Add this line to `~/.bashrc` or `~/.zshrc` to persist across sessions.
+      </Tab>
+      <Tab title="PowerShell / Windows">
+        ```powershell
+        $env:LIGHTWEIGHT_API_KEY = "your-api-key-here"
+        ```
+      </Tab>
+    </Tabs>
+  </Step>
+  <Step title="Verify connection">
+    Run the following command to confirm the gateway is reachable:
+
+    ```bash
+    curl -s https://api.lightweight.one/v1/models \
+      -H "Authorization: Bearer $LIGHTWEIGHT_API_KEY" | head -c 200
+    ```
+
+    You should see a JSON response containing model objects. Once verified, run `codex` in a terminal to start using it.
+  </Step>
+</Steps>
+
+---
+
+## Alternative Configuration
+
+If you encounter issues with the `model_providers` approach, use this simpler configuration instead:
+
+```toml
+openai_base_url = "https://api.lightweight.one/v1"
+model = "gpt-5.4"
+```
+
+This bypasses the `model_providers` mechanism entirely and routes all requests through the gateway.
+
+<Warning>
+  **Known issue:** The VS Code extension and some CLI versions may not respect custom `model_providers` ([#4558](https://github.com/openai/codex/issues/4558)). If you experience unexpected behavior, switch to the `openai_base_url` approach above.
+</Warning>
+
+---
+
+## Available Models
+
+| Model | Context | Description | Best For |
+|-------|---------|-------------|----------|
+| `gpt-5.4` | 400K | Latest GPT model with reasoning + vision | General coding tasks (default) |
+| `gpt-5.4-mini` | 400K | Smaller, faster GPT model | Quick edits, simple tasks |
+| `gpt-5.3-codex` | 400K | Specialized for code, 128K output | Large refactors, code generation |
+| `o3` | 200K | Reasoning model with chain-of-thought | Complex problem solving |
+| `o4-mini` | 200K | Compact reasoning model | Balanced reasoning + speed |
+| `claude-opus-4.6` | 1M | Anthropic Claude (via gateway) | Long-context, nuanced tasks |
+| `claude-sonnet-4.6` | 1M | Fast Claude model | Quick Claude responses |
+
+<Tip>
+  Model aliases like `codex`, `gpt-codex`, and `gpt5.4` also work. The gateway resolves common aliases automatically.
+</Tip>
+
+---
+
+## Troubleshooting
+
+- **"Model not found" errors:** Check that the model name matches one from the table above. The gateway has alias resolution but completely invalid names return 404.
+- **Connection refused:** Verify `base_url` ends with `/v1` and the URL is `https://api.lightweight.one/v1`.
+- **429 rate limit:** The gateway applies per-user rate limiting. Wait and retry, or contact your administrator.
+- **Authentication errors:** Verify the `LIGHTWEIGHT_API_KEY` environment variable is set and the key is valid.
+
+---
+
+## Preview Environment
+
+<Tip>
+  For testing, use the preview gateway. Replace the URL in `config.toml`:
+
+  ```toml
+  base_url = "https://preview.api.lightweight.one/v1"
+  ```
+</Tip>
