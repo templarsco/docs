@@ -1,39 +1,55 @@
 ---
 title: Roadmap
-description: What's coming next for the Lightweight API.
+description: What's shipped and what's coming next for Lightweight API.
 ---
 
-## v1.x — Embeddings API
+## Shipped
 
-We're adding support for embeddings models through the standard OpenAI-compatible `/v1/embeddings` endpoint. This will let you generate vector embeddings from multiple providers using the same unified API.
+### Embeddings API
 
-**Preview:**
+Generate vector embeddings through the standard OpenAI-compatible `/v1/embeddings` endpoint. Multiple models available through a single API key.
 
 ```bash
 curl https://api.lightweight.one/v1/embeddings \
-  -H "Authorization: Bearer lw_sk_your-key-here" \
+  -H "Authorization: Bearer $LIGHTWEIGHT_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "text-embedding-3-large",
+    "model": "text-embedding-3-small",
     "input": "The quick brown fox jumps over the lazy dog"
   }'
 ```
 
-<Note>
-  The Embeddings API is currently in development. Join the [community discussions](https://github.com/templarsco/lightweight/discussions) to follow progress and share feedback.
-</Note>
+<Tip>
+  See the full [Embeddings API reference](/advanced/embeddings) for models, parameters, and batch examples.
+</Tip>
+
+### Codex CLI & IDE Support
+
+Full support for the OpenAI Codex CLI and VS Code extension via the Responses API. One `config.toml` connects both tools to the gateway.
+
+- [Codex CLI setup guide](/integrations/codex-cli)
+- [Codex IDE setup guide](/integrations/codex-ide)
+
+### Site Redesign (v2.0)
+
+Professional dashboard, usage analytics, real-time monitoring, public status page, admin panel, and this documentation site — all shipped.
+
+- [Dashboard](https://lightweight.one/dashboard)
+- [Status Page](https://lightweight.one/status)
+- [Changelog](https://lightweight.one/changelog)
 
 ---
 
-## v2 — Agent Skills
+## Coming Next
 
-Version 2 will introduce **Agent Skills** — a framework for connecting AI models to tools and external services through the Lightweight gateway.
+### v3.0 — Monetization & Self-Service
 
-Agent Skills will allow you to:
+- Subscription plans via Whop.com
+- Self-service registration flow
+- Settings page with account management
+- Stock-based usage system per plan tier
+- Terms of Service and Privacy Policy pages
 
-- Define tool schemas and connect them to any model
-- Execute multi-step agent workflows across providers
-- Chain models together (e.g., use a fast model for routing and a flagship model for generation)
-- Access built-in skills for common tasks like web search, code execution, and file management
-
-More details will be shared as development progresses. Stay tuned on the [Dashboard](https://lightweight.one/dashboard) and [GitHub](https://github.com/templarsco/lightweight/discussions).
+<Note>
+  Follow progress on [GitHub Discussions](https://github.com/templarsco/lightweight/discussions).
+</Note>
