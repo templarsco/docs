@@ -1,0 +1,141 @@
+---
+title: Embeddings API
+description: Generate text embeddings through the Lightweight API gateway using the OpenAI-compatible endpoint.
+---
+
+Generate vector representations of text using the OpenAI-compatible embeddings endpoint. The same API key you use for chat and responses works for embeddings.
+
+<Note>
+  The embeddings endpoint uses the same API key and authentication as all other gateway endpoints. No additional configuration is required.
+</Note>
+
+---
+
+## Endpoint
+
+```
+POST /v1/embeddings
+```
+
+Base URL: `https://api.lightweight.one`
+
+Include an `Authorization: Bearer YOUR_API_KEY` header with every request.
+
+---
+
+## Supported Models
+
+| Model | Default Dimensions | Configurable | Max Input Tokens |
+|-------|-------------------|-------------|-----------------|
+| `text-embedding-3-small` | 1536 | 1-1536 via `dimensions` | 8,192 |
+| `text-embedding-ada-002` | 1536 | No | 8,192 |
+
+<Tip>
+  `text-embedding-3-small` is recommended for new projects. It supports configurable output dimensions for smaller, faster vectors. `text-embedding-ada-002` is a legacy model.
+</Tip>
+
+---
+
+## Request Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `model` | string | Yes | Model ID (see Supported Models above) |
+| `input` | string or string[] | Yes | Text to embed. Single string or array of strings (max 2,048 items per batch). Also accepts `number[]` (pre-tokenized) and `number[][]` (batch pre-tokenized). |
+| `dimensions` | integer | No | Output dimensions (only for `text-embedding-3-small`, range 1-1536) |
+| `encoding_format` | string | No | `"float"` (default) or `"base64"` |
+| `user` | string | No | End-user identifier for abuse monitoring |
+
+---
+
+## Examples
+
+<CodeGroup>
+  ```bash Single Input
+  curl -s -X POST https://api.lightweight.one/v1/embeddings \
+    -H "Authorization: Bearer $LIGHTWEIGHT_API_KEY" \
+    -H "Content-Type: application/json" \
+    -d '{
+      "model": "text-embedding-3-small",
+      "input": "The quick brown fox jumps over the lazy dog"
+    }'
+  ```
+  ```bash Batch Input
+  curl -s -X POST https://api.lightweight.one/v1/embeddings \
+    -H "Authorization: Bearer $LIGHTWEIGHT_API_KEY" \
+    -H "Content-Type: application/json" \
+    -d '{
+      "model": "text-embedding-3-small",
+      "input": ["First sentence", "Second sentence", "Third sentence"]
+    }'
+  ```
+  ```bash Custom Dimensions
+  curl -s -X POST https://api.lightweight.one/v1/embeddings \
+    -H "Authorization: Bearer $LIGHTWEIGHT_API_KEY" \
+    -H "Content-Type: application/json" \
+    -d '{
+      "model": "text-embedding-3-small",
+      "input": "Reduce dimensions for smaller vectors",
+      "dimensions": 512
+    }'
+  ```
+  ```bash Base64 Format
+  curl -s -X POST https://api.lightweight.one/v1/embeddings \
+    -H "Authorization: Bearer $LIGHTWEIGHT_API_KEY" \
+    -H "Content-Type: application/json" \
+    -d '{
+      "model": "text-embedding-3-small",
+      "input": "Return base64 encoded embedding",
+      "encoding_format": "base64"
+    }'
+  ```
+</CodeGroup>
+
+---
+
+## Response Format
+
+```json
+{
+  "object": "list",
+  "data": [
+    {
+      "object": "embedding",
+      "embedding": [0.0023064255, -0.009327292, 0.015462338, "...1536 floats total"],
+      "index": 0
+    }
+  ],
+  "model": "text-embedding-3-small",
+  "usage": {
+    "prompt_tokens": 9,
+    "total_tokens": 9
+  }
+}
+```
+
+| Field | Description |
+|-------|-------------|
+| `object` | Always `"list"` |
+| `data` | Array of embedding objects |
+| `data[].object` | Always `"embedding"` |
+| `data[].embedding` | Float array (default) or base64 string (when `encoding_format: "base64"`) |
+| `data[].index` | Integer matching the input order |
+| `model` | The model used |
+| `usage.prompt_tokens` | Number of tokens in the input |
+| `usage.total_tokens` | Same as `prompt_tokens` (embeddings have no output tokens) |
+
+---
+
+## Limits
+
+- Maximum **8,192 tokens** per input string
+- Maximum **2,048 items** per batch request
+- Maximum **300,000 total tokens** per request
+
+---
+
+## Preview Environment
+
+<Tip>
+  For testing, use the preview gateway at `https://preview.api.lightweight.one`. Replace the base URL in your requests to route through the preview environment.
+</Tip>
